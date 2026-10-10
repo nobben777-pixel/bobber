@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
 
       # Мой код написан под Mojang-маппинги: принудительно ставим их в build.gradle
       - name: Use Mojang mappings
