@@ -1,0 +1,30 @@
+name: build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      # Мой код написан под Mojang-маппинги: принудительно ставим их в build.gradle
+      - name: Use Mojang mappings
+        run: |
+          sed -i 's|^[[:space:]]*mappings .*|\tmappings loom.officialMojangMappings()|' build.gradle
+          grep -n "mappings" build.gradle
+
+      - run: chmod +x ./gradlew
+      - run: ./gradlew build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mod-jar
+          path: build/libs/*.jar
